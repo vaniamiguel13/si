@@ -51,8 +51,7 @@ si
 │   │   ├── data
 │   │   │   ├── __init__.py
 ├── datasets
-│   ├── __init__.py
-│   ├── iris.csv
+│   ├── README.md
 │   ├── ...
 ├── scripts
 │   ├── README.md
