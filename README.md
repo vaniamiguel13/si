@@ -31,8 +31,17 @@ pip install numpy pandas scipy matplotlib
 ```
 Note: You can also create a similar Python package and push it to your GitHub.
 
-Make a change to the README.md file (add your co-authorship in the credits section) 
-and commit it to your local repository:
+Make a change to the repository: Add your co-authorship to the _\_\_init\_\_.py_ file (within the si folder):
+```python
+__author__ = "YOUR_NAME" 
+__credits__ = ["YOUR_NAME"]
+__license__ = "Apache License 2.0"
+__version__ = "0.0.1"
+__maintainer__ = "YOUR_NAME"
+__email__ = "YOUR_EMAIL"
+```
+
+Then, commit it to your local repository and publish it to your GitHub:
 ```bash
 git add README.md
 git commit -m "Adding my co-authorship to README.md file"
