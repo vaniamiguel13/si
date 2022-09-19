@@ -1,24 +1,78 @@
-![CI-CD](https://github.com/vmspereira/si/actions/workflows/main.yaml/badge.svg)
-
 # Sistemas Inteligentes para Bioinformática
 
-## Mestrado em Bioinformática, Universidade do Minho, 2021-2022.
+## Curricular Unit
+Mestrado em Bioinformática, Universidade do Minho, 2022-2023.
 
-A library of machine learning algorithms to grasp essential concepts on a ML curriculum.
-Only the basic modules and classes should be provided to students. The aim it that they should build their own implementations of refence ML algorithms using a common API.
 
-`git clone https://github.com/vmspereira/si.git`
+## Description
+A package of machine learning algorithms to grasp the concepts of the course.
+Students should implement essential algorithms from scratch using numpy and pandas.
+Implementations must follow a common and simple API.
 
-`cd si`
 
-`pip install -e .`
+## Setup
+To get started, fork the repository from GitHub and clone it to your local machine.
 
-The _src_ folder contains the base source over which you will implement you code.
+Fork the following GitHub repository: https://github.com/cruz-f/si
+![img.png](docs/img.png)
 
-The _tests_ folder are python tests for continuous integration.
+Then, clone the repository to your local machine:
+```bash
+git clone https://github.com/YOUR_USERNAME/si.git
+```
 
-The _dataset_ folder contains some illustrative datasets.
+Open the repository in your favorite IDE and install the dependencies (if missing):
+```bash
+pip install -r requirements.txt
+```
+or
+```bash
+pip install numpy pandas scipy matplotlib
+```
+Note: You can also create a similar Python package and push it to your GitHub.
 
-The _script_ folder contains some scripts to test your code:
+Make a change to the README.md file (add your co-authorship in the credits section) 
+and commit it to your local repository:
+```bash
+git add README.md
+git commit -m "Adding my co-authorship to README.md file"
+git push origin main
+```
+Note: you can also use the IDE Git tools.
 
-`python scripts/dataset.py`
+
+## Architecture
+The package is organized as follows:
+```
+si
+├── src
+│   ├── si
+│   │   ├── __init__.py
+│   │   ├── data
+│   │   │   ├── __init__.py
+├── datasets
+│   ├── __init__.py
+│   ├── iris.csv
+│   ├── ...
+├── scripts
+│   ├── README.md
+│   ├── ...
+├── ... (python package configuration files)
+```
+
+A tour to Python packages:
+- The _src_ folder contains the source code of the package. It should contain an intermediate file 
+called _si_ (the name of the package) and the modules of the package. All python packages and subpackages
+must also contain a file called _\_\_init\_\_.py_.
+- The _datasets_ folder contains the datasets used in the scripts.
+- The _scripts_ folder contains the scripts used to test the package and include examples.
+
+Note: It is also common to have a _tests_ folder to include the unit tests of the package. However,
+we will not cover this topic in this course.
+
+Note: A python package also contains many configuration files (e.g., _setup.py_, _requirements.txt_, etc.).
+
+
+## Credits
+This package was originally developed by [Vítor Pereira](https://github.com/vmspereira/si) and 
+maintained lately by [Fernando Cruz](https://github.com/cruz-f/si).
