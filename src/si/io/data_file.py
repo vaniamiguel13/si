@@ -1,50 +1,62 @@
-import sys
-
-from pandas import DataFrame
-from pandas.io.parsers import TextFileReader
-
-sys.path.append('D:/Mestrado/2ano/1semestre/SIB/si/datasets')
-import pandas as pd
 import numpy as np
-from dataset import Dataset
-from io import StringIO
+
+from si.data.dataset import Dataset
 
 
-def read_data_file (filename, sep = ',',label = False):
-    df = np.genfromtxt(filename, delimiter=sep, dtype='unicode')
-    if label == True:
-        ft= df[0:1, 1:]
-        X = df[1:, 1:]
-        y = df[1:, 0]
-        lb=df[0:1, 0]
+def read_data_file(filename: str,
+                   sep: str = None,
+                   label: bool = False) -> Dataset:
+    """
+    Reads a data file into a Dataset object
+    Parameters
+    ----------
+    filename : str
+        Path to the file
+    sep : str, optional
+        The separator used in the file, by default None
+    label : bool, optional
+        Whether the file has a label, by default False
+    Returns
+    -------
+    Dataset
+        The dataset object
+    """
+    raw_data = np.genfromtxt(filename, delimiter=sep)
+
+    if label:
+        X = raw_data[:, :-1]
+        y = raw_data[:, -1]
+
     else:
-        ft = df[0:1, :]
-        lb=None
-        X = df[1:, :]
+        X = raw_data
         y = None
-    return Dataset(X,y,features=ft, label=lb)
-print(read_data_file ('D:/Mestrado/2ano/1semestre/SIB/si/datasets/o.txt', sep = ',',label=True))
 
-def write_data_file (filename, dataset, sep = ',',label = False):
+    return Dataset(X, y)
 
-    df = pd.DataFrame(data=dataset.X)
-    if not (dataset.X is None):
-        df.columns = dataset.Features
 
-    if not (dataset.Y is None):
-        df.insert(loc=0, column=dataset.Label, value=dataset.Y)
+def write_data_file(filename: str,
+                    dataset: Dataset,
+                    sep: str = None,
+                    label: bool = False) -> None:
+    """
+    Writes a Dataset object to a data file
+    Parameters
+    ----------
+    filename : str
+        Path to the file
+    dataset : Dataset
+        The dataset object
+    sep : str, optional
+        The separator used in the file, by default None
+    label : bool, optional
+        Whether to write the file with label, by default False
+    """
+    if not sep:
+        sep = " "
 
-    df=df.to_numpy()
-    col= dataset.Features
-    if dataset.Y is not None:
-        col.insert(0,dataset.Label)
+    if label:
+        data = np.hstack((dataset.X, dataset.y.reshape(-1, 1)))
+    else:
+        data = dataset.X
 
-    np.savetxt(filename, df, delimiter=sep, header=','.join(col), comments='')
-    return 'Done'
-
-x=np.array([[1,2,3], [3,2,3]])
-y=np.array([1,2])
-features= ['A', 'B','C']
-label= 'y'
-dataset= Dataset(X=x, y=None, features= features, label=None)
-print(write_data_file('D:/Mestrado/2ano/1semestre/SIB/si/datasets/o.txt', dataset,',',False))
+    return np.savetxt(filename, data, delimiter=sep)
