@@ -2,7 +2,7 @@ import numpy as np
 from si.metrics.rmse import rmse
 from si.statistics.euclidean_distance import euclidean_distance
 
-class KNNRegrassor:
+class KNNRegressor:
 
     def __int__(self, k: int , distance = euclidean_distance):
         self.k = k

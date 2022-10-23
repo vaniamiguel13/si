@@ -1,9 +1,9 @@
-#from si.statistics.euclidean_distance import euclidean_distance
+from si.statistics.euclidean_distance import euclidean_distance
 import numpy as np
 from si.metrics.accuracy import accuracy
 
 
-class KNClassifier:
+class KNNClassifier:
 
     def __int__(self, k: int , distance = euclidean_distance):
         self.k = k
