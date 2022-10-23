@@ -24,7 +24,7 @@ class Dataset:
         return r
 
     def shape(self):
-        return x.shape
+        return X.shape
     
     def has_label(self):
         if y == None:
