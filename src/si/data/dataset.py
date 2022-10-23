@@ -8,7 +8,7 @@ class Dataset:
         #label = str
         self.X= X
         self.Y= y
-        self.Features = features 
+        self.Features = features
         self.Label = label
 
 
@@ -24,7 +24,7 @@ class Dataset:
         return r
 
     def shape(self):
-        return X.shape
+        return self.X.shape
     
     def has_label(self):
         if y == None:

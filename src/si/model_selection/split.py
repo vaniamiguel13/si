@@ -1,4 +1,5 @@
 import numpy as np
+from si.data.dataset import Dataset
 
 
 def train_test_split(dataset, test_size, random_state):
@@ -6,14 +7,16 @@ def train_test_split(dataset, test_size, random_state):
 
     n_samples= dataset.shape()[0]
 
-    n_test= int(n_samples) * test_size
+    n_test= int(n_samples * test_size)
 
-    permutations = np.rando.permutation(n_samples)
+    permutations = np.random.permutation(n_samples)
 
-    test_indx= permutations[:n_test]
+    test_indx = permutations[:n_test]
 
-    train_indx= permutations[n_test:]
+    train_indx = permutations[n_test:]
 
-    train = Dataset(dataset.X[train_indx], dataset.y[train_indx], features = dataset.features, label=dataset.label)
-    test = Dataset(dataset.X[test_indx], dataset.y[test_indx], features = dataset.features, label=dataset.label)
+
+    train = Dataset(dataset.X[train_indx], dataset.Y[train_indx], features = dataset.Features, label=dataset.Label)
+    test = Dataset(dataset.X[test_indx], dataset.Y[test_indx], features = dataset.Features, label=dataset.Label)
+
     return train, test

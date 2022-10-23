@@ -4,7 +4,7 @@ from si.statistics.euclidean_distance import euclidean_distance
 
 class KNNRegressor:
 
-    def __int__(self, k: int , distance = euclidean_distance):
+    def __init__(self, k: int , distance = euclidean_distance):
         self.k = k
         self.distance = distance
 
@@ -25,7 +25,7 @@ class KNNRegressor:
         indexes = np.argsort(distances)[:self.k]
 
         # get the labels of the closet neighbors
-        closest_y = self.dataset.y[indexes]
+        closest_y = self.dataset.Y[indexes]
 
         # get mean
         media = np.mean(closest_y)
@@ -33,5 +33,5 @@ class KNNRegressor:
 
 
     def score(self, dataset):
-        return rmse(dataset.y, self.predict(dataset))
+        return rmse(dataset.Y, self.predict(dataset))
 
