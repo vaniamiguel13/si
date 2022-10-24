@@ -4,7 +4,7 @@ from typing import Callable
 
 class SelectPercentile:
 
-    def __int__(self, score_fun, percentile):
+    def __init__(self, score_fun, percentile):
         self.score_func = score_fun
         self.percentile = percentile
 

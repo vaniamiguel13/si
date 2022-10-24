@@ -8,7 +8,7 @@ class SelectKBest:
     Filtragem da dados baseada em F-scores. Seleciona apenas as melhores variáveis (k).
     '''
 
-    def __int__(self, score_func, k:int):
+    def __init__(self, score_func, k:int):
         self.score_func = score_func
         self.k = k
 
