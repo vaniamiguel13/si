@@ -223,7 +223,7 @@ if __name__ == '__main__':
     from si.model_selection.split import train_test_split
     from si.io.CSV import read_csv
     from sklearn.preprocessing import StandardScaler
-    data1 = read_csv("D:/Mestrado/2ano/1semestre/SIB/si/datasets/breast/breast-bin.data", ",", False, True)
+    data1 = read_csv("D:/Mestrado/2ano/1semestre/SIB/si/datasets/breast/breast-bin.data", ",", True, True)
 
 
 

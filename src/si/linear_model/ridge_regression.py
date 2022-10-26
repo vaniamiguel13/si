@@ -2,6 +2,7 @@ import numpy as np
 
 from si.data.dataset import Dataset
 from si.metrics.mse import mse
+from sklearn.preprocessing import StandardScaler
 
 
 class RidgeRegression:
@@ -27,7 +28,7 @@ class RidgeRegression:
         The model parameter, namely the intercept of the linear model.
         For example, theta_zero * 1
     """
-    def __init__(self, use_adaptive_alpha: bool = False, l2_penalty: float = 1, alpha: float = 0.001, max_iter: int = 1000):
+    def __init__(self, use_adaptive_alpha: bool = False, l2_penalty: float = 1, alpha: float = 0.001, max_iter: int = 2000):
         """
 
         Parameters
@@ -50,7 +51,9 @@ class RidgeRegression:
         self.theta_zero = None
         self.history = {}
 
-    def fit(self, dataset: Dataset):
+    def fit(self, dataset: Dataset, STscale: bool = False):
+        if STscale:
+            dataset.X = StandardScaler().fit_transform(dataset.X)
         if self.use_adaptive_alpha is True: self._adaptive_fit(dataset)
         elif self.use_adaptive_alpha is False: self._regular_fit(dataset)
 
@@ -135,12 +138,22 @@ class RidgeRegression:
 
             #custo
             custo = self.cost(dataset)
-            if i != 0:
-                if (self.history.get(i-1) - custo) < 1.:
 
+            if i != 0:
+                dif = (self.history.get(i - 1) - custo)
+
+                if dif < 1:
                     self.alpha = self.alpha / 2
 
             self.history[i] = custo
+
+        no_dups = {}
+
+        for key, value in self.history.items():
+            if value not in no_dups.values():
+                no_dups[key] = value
+
+        self.history = no_dups
 
         return self
 
@@ -206,27 +219,31 @@ class RidgeRegression:
 if __name__ == '__main__':
     # import dataset
     from si.data.dataset import Dataset
+    from si.io.CSV import read_csv
 
+
+    data1 = read_csv("D:/Mestrado/2ano/1semestre/SIB/si/datasets/cpu/cpu.csv", ",", True, True)
     # make a linear dataset
-    X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
-    y = np.dot(X, np.array([1, 2])) + 3
-    dataset_ = Dataset(X=X, y=y)
+    # X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+    # y = np.dot(X, np.array([1, 2])) + 3
+    # dataset_ = Dataset(X=X, y=y)
 
     # fit the model
     model = RidgeRegression(True)
-    model.fit(dataset_)
+    model.fit(data1, True)
+
 
     # get coefs
     print(f"Parameters: {model.history}")
 
     # compute the score
-    score = model.score(dataset_)
+    score = model.score(data1)
     print(f"Score: {score}")
 
     # compute the cost
-    cost = model.cost(dataset_)
+    cost = model.cost(data1)
     print(f"Cost: {cost}")
 
     # predict
-    y_pred_ = model.predict(Dataset(X=np.array([[3, 5]])))
+    y_pred_ = model.predict(data1)
     print(f"Predictions: {y_pred_}")
