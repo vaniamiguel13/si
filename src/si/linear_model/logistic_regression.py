@@ -31,7 +31,10 @@ class LogisticRegression:
         self.theta_zero = None
         self.history = {}
 
-    def fit(self, dataset: Dataset):
+    def fit(self, dataset: Dataset, STscale: bool = False):
+
+        if STscale:
+            dataset.X = StandardScaler().fit_transform(dataset.X)
         if self.use_adaptive_alpha is True: self._adaptive_fit(dataset)
         elif self.use_adaptive_alpha is False: self._regular_fit(dataset)
 
@@ -47,9 +50,10 @@ class LogisticRegression:
 
         Returns
         -------
-        self: RidgeRegression
+        self: LogisticRegression
             The fitted model
         """
+
         m, n = dataset.shape()
         # initialize the model parameters
         self.theta = np.zeros(n)
@@ -81,6 +85,7 @@ class LogisticRegression:
                     break
             # self.history[i] = custo
 
+
         return self
 
     def _adaptive_fit(self, dataset: Dataset) -> 'LogisticRegression':
@@ -97,13 +102,17 @@ class LogisticRegression:
         self: RidgeRegression
             The fitted model
         """
+
         m, n = dataset.shape()
+
         # initialize the model parameters
         self.theta = np.zeros(n)
         self.theta_zero = 0
 
+
         # gradient descent
         for i in range(self.max_iter):
+
             # predicted y
             y_pred = sigmoid_function(np.dot(dataset.X, self.theta) + self.theta_zero)
 
@@ -119,13 +128,22 @@ class LogisticRegression:
 
             #custo
             custo = self.cost(dataset)
+
             if i != 0:
+                dif = (self.history.get(i-1) - custo)
 
-                if np.abs(self.history.get(i-1) - custo) < 0.0001:
-
+                if dif < 0.0001:
                     self.alpha = self.alpha / 2
 
             self.history[i] = custo
+
+        no_dups = {}
+
+        for key, value in self.history.items():
+            if value not in no_dups.values():
+                no_dups[key] = value
+
+        self.history = no_dups
 
         return self
 
@@ -201,33 +219,37 @@ class LogisticRegression:
 
 
 if __name__ == '__main__':
-    # import dataset
+    import dataset
+    from si.model_selection.split import train_test_split
     from si.io.CSV import read_csv
     from sklearn.preprocessing import StandardScaler
-    data1 = read_csv("D:/Mestrado/2ano/1semestre/SIB/si/datasets/breast/breast-bin.data", ",",True, True)
-    # scaler = StandardScaler()
+    data1 = read_csv("D:/Mestrado/2ano/1semestre/SIB/si/datasets/breast/breast-bin.data", ",", False, True)
+
+
+
 
     # fit the model
     model = LogisticRegression(True)
-    model.fit(data1)
-    print(model.history)
-    print(model.line_plot())
+    model.fit(data1, True)
+    model.line_plot()
+    # print(model.history)
+
 
     # # get coefs
     # print(f"Parameters: {model.theta}")
     #
     # # compute the score
-    # score = model.score(dataset_)
+    # score = model.score(data1)
     # print(f"Score: {score}")
-    #
-    # # compute the cost
+
+    # compute the cost
     # cost = model.cost(dataset_)
     # print(f"Cost: {cost}")
 
     # predict
-    y_pred_ = model.predict(data1)
-    print()
-    print(f"Predictions: {y_pred_}")
-    print('\nScore:',model.score(data1) )
-    print('\nCost:', model.cost(data1))
+    # y_pred_ = model.predict(data1)
+    # print()
+    # print(f"Predictions: {y_pred_}")
+    # print('\nScore:',model.score(data1) )
+    # print('\nCost:', model.cost(data1))
 
