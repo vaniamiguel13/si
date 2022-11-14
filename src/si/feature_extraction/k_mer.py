@@ -9,7 +9,7 @@ class KMer:
         self.k_mers = None
         self.k = k
         if alphabet.upper() == 'DNA':
-            self.alph= 'ACTG'
+            self.alph = 'ACTG'
         elif alphabet.upper() == 'PROT':
             self.alph = 'ACDEFGHIKLMNPQRSTVWY'
 
