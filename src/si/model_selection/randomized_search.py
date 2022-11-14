@@ -1,11 +1,11 @@
 from typing import List
-
 import numpy as np
 import itertools
 from si.model_selection.cross_validate import cross_validate
 
 
-def grid_search_cv(model, dataset, parameter_grid, scoring, cv: int = 3, test_size: float = 0.2) -> list[dict]:
+
+def randomized_search_cv(model, dataset, parameter_dist, scoring, cv: int = 3, n_iter = 100, test_size: float = 0.2) -> dict:
     for parameter in parameter_grid:
         if not hasattr(model, parameter):
             raise AttributeError(f'Model {model} não tem o parâmetro {parameter}')
@@ -27,3 +27,4 @@ def grid_search_cv(model, dataset, parameter_grid, scoring, cv: int = 3, test_si
         scores.append(score)
 
     return scores
+
