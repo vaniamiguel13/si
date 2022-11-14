@@ -56,7 +56,7 @@ class LogisticRegression:
         self: LogisticRegression
             The fitted model
         """
-        print(self.max_iter)
+
         m, n = dataset.shape()
         # initialize the model parameters
         self.theta = np.zeros(n)

@@ -12,22 +12,18 @@ def randomized_search_cv(model, dataset, parameter_dist, scoring:Callable=None, 
 
     scores = []
 
-    combinations = np.array(list(itertools.product(*parameter_dist.values())))
-    indx = np.random.choice(len(combinations), n_iter, replace= False)
-    combs = combinations[indx]
-
-    for comb in combs:
-
+    for _ in range(n_iter):
         parameters = {}
-
-        for parameter, value in zip(parameter_dist.keys(), comb):
-            setattr(model, parameter, value)
-            parameters[parameter] = value
+        for param in parameter_dist:
+            value = np.random.choice(parameter_dist[param])
+            setattr(model, param, value)
+            parameters[param] = value
 
         score = cross_validate(model, dataset, scoring, cv, test_size)
-
-        score['parameters'] = parameters
+        score["parameters"] = parameters
 
         scores.append(score)
 
     return scores
+
+
