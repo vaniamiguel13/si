@@ -1,9 +1,10 @@
 import numpy as np
 from si.data.dataset import Dataset
 from si.model_selection.split import train_test_split
+from collections.abc import Callable
 
 
-def cross_validate(model, dataset, scoring, cv: int = 3, test_size: float = 0.2) -> dict:
+def cross_validate(model, dataset, scoring:Callable = None, cv: int = 3, test_size: float = 0.2) -> dict:
     scores = {
         'seeds': [],
         'train': [],
@@ -34,4 +35,4 @@ def cross_validate(model, dataset, scoring, cv: int = 3, test_size: float = 0.2)
             scores['train'].append(scoring(y_train, model.predict(train)))
             scores['test'].append(scoring(y_test, model.predict(train)))
 
-        return scores
+    return scores

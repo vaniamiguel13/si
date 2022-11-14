@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 class LogisticRegression:
 
     def __init__(self, use_adaptive_alpha: bool = False, l2_penalty: float = 1, alpha: float = 0.001,
-                 max_iter: int = 2000):
+                 max_iter: int = 200):
         """
 
         Parameters
@@ -56,7 +56,7 @@ class LogisticRegression:
         self: LogisticRegression
             The fitted model
         """
-
+        print(self.max_iter)
         m, n = dataset.shape()
         # initialize the model parameters
         self.theta = np.zeros(n)
