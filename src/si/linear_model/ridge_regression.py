@@ -51,11 +51,12 @@ class RidgeRegression:
         self.theta_zero = None
         self.history = {}
 
-    def fit(self, dataset: Dataset, STscale: bool = False):
-        if STscale:
-            dataset.X = StandardScaler().fit_transform(dataset.X)
-        if self.use_adaptive_alpha is True: self._adaptive_fit(dataset)
-        elif self.use_adaptive_alpha is False: self._regular_fit(dataset)
+    def fit(self, dataset: Dataset):
+
+        if self.use_adaptive_alpha is True:
+            self._adaptive_fit(dataset)
+        elif self.use_adaptive_alpha is False:
+            self._regular_fit(dataset)
 
     def _regular_fit(self, dataset: Dataset) -> 'RidgeRegression':
         """
