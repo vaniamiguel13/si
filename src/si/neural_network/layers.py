@@ -33,6 +33,10 @@ class SigmoidActivation:
     def forward(self, input_data: np.array):
         return sigmoid_function(input_data)
 
+    def backward(self, error: np.ndarray, learning_rate):
+
+        return error
+
 
 class SoftMaxActivation:
     def __init__(self):
