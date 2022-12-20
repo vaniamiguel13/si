@@ -1,7 +1,8 @@
 from si.data.dataset import Dataset
 import numpy as np
-from si.metrics import mse
+from si.metrics.mse import mse, mse_derivate
 from typing import Callable
+
 
 class NN:
 
@@ -10,7 +11,8 @@ class NN:
         if layers is None:
             layers = []
         self.layers = layers
-        self.epochs = epochs
+        self.epochs = int(epochs)
+        assert self.epochs >= 1, "epochs >= 1"
         self.loss_fun = loss_fun
         self.learning_rate = learning_rate
         self.loss_derivate = loss_derivate
@@ -20,20 +22,23 @@ class NN:
 
     def fit(self, dataset: Dataset) -> 'NN':
 
-        X = dataset.X
-        Y = dataset.Y
-
         for epoch in range(1,  self.epochs + 1):
 
+            X = np.array(dataset.X)
+            Y = np.reshape(dataset.Y, (-1, 1))
+
+            # forward propagation
             for layer in self.layers:
                 X = layer.forward(X)
 
+            #backward propagation
             error = self.loss_derivate(Y,X)
             for layer in self.layers[::-1]:
                 error= layer.backward(error, self.learning_rate)
 
-            cost= self.loss_fun(Y, X)
-            self.history[epoch]=cost
+            #save history
+            cost = self.loss_fun(Y, X)
+            self.history[epoch] = cost
 
             if self.verbose:
                 print(f'Epoch {epoch}/{self.epochs} - cost: {cost}')
@@ -49,5 +54,4 @@ class NN:
 
         return X
 
-    def cost(self, ):
 
