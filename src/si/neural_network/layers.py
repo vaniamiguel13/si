@@ -27,11 +27,13 @@ class Dense:
         # sums values of each column, and adds bias line
 
     def backward(self, error: np.ndarray, learning_rate: float = 0.001) -> np.ndarray:
-        self.weights -= learning_rate * np.dot(self.X.T, error)
-        error_propagate = np.dot(error, self.weights.T)
-        self.bias -= learning_rate * np.sum(error, axis=0)
 
-        return error_propagate
+        error_to_propagate = np.dot(error, self.weights.T)
+        # Update weights and bias
+        self.weights = self.weights - learning_rate * np.dot(self.X.T, error)
+        self.bias = self.bias - learning_rate * np.sum(error, axis=0)
+        # Return error for previous layer
+        return error_to_propagate
 
 
 class SigmoidActivation:
@@ -46,7 +48,6 @@ class SigmoidActivation:
     def backward(self, error: np.ndarray, learning_rate: bool = 0.001) -> np.ndarray:
         sigmoid_derivative = 1 / (1 + np.exp(-self.X))
         sigmoid_derivative = sigmoid_derivative * (1 - sigmoid_derivative)
-
         error_propagate = error * sigmoid_derivative
 
         return error_propagate
@@ -59,9 +60,11 @@ class SoftMaxActivation:
     def forward(self, input_data: np.array):
         self.X = input_data
         ez = np.exp(input_data)
-        return ez / (np.sum(ez, axis=1, keepdims=True))
+        otp = ez / (np.sum(ez, axis=1, keepdims=True))
+        return otp
 
     def backward(self, error: np.ndarray, learning_rate_bool=0.001):
+        #método para não dar erro, não está completo
         return error
 
 
@@ -77,3 +80,17 @@ class ReLUActivation:
     def backward(self, error: np.ndarray, learning_rate: bool = 0.001):
         error_propagate = np.where(self.X > 0, 1, 0)
         return error_propagate
+
+
+class LinearActivation:
+    def __init__(self) -> None:
+        self.X = None
+
+    def forward(self, input_data: np.ndarray) -> np.ndarray:
+
+        self.X = input_data
+        return input_data
+
+    def backward(self, error: np.ndarray, learning_rate) -> np.ndarray:
+
+        return np.ones(self.X.size).reshape(self.X.shape)

@@ -1,9 +1,15 @@
-import numpy as np
 
-from si.data.dataset import Dataset
+
 from si.metrics.mse import mse
-from sklearn.preprocessing import StandardScaler
 
+import numpy as np
+from si.data.dataset import Dataset
+
+import matplotlib
+
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 
 class RidgeRegression:
     """
@@ -28,7 +34,9 @@ class RidgeRegression:
         The model parameter, namely the intercept of the linear model.
         For example, theta_zero * 1
     """
-    def __init__(self, use_adaptive_alpha: bool = False, l2_penalty: float = 1, alpha: float = 0.001, max_iter: int = 2000):
+
+    def __init__(self, use_adaptive_alpha: bool = False, l2_penalty: float = 1, alpha: float = 0.001,
+                 max_iter: int = 2000):
         """
 
         Parameters
@@ -103,7 +111,7 @@ class RidgeRegression:
                     break
         return self
 
-    def _adaptive_fit(self, dataset: Dataset) -> 'LogisticRegression':
+    def _adaptive_fit(self, dataset: Dataset) -> 'RidgeRegression':
         """
         Fit the model to the dataset
 
@@ -137,7 +145,7 @@ class RidgeRegression:
             self.theta = self.theta - gradient - penalization_term
             self.theta_zero = self.theta_zero - (self.alpha * (1 / m)) * np.sum(y_pred - dataset.Y)
 
-            #custo
+            # custo
             custo = self.cost(dataset)
 
             if i != 0:
@@ -221,18 +229,19 @@ if __name__ == '__main__':
     # import dataset
     from si.data.dataset import Dataset
     from si.io.CSV import read_csv
-
+    from si.model_selection.split import train_test_split
 
     data1 = read_csv("D:/Mestrado/2ano/1semestre/SIB/si/datasets/cpu/cpu.csv", ",", True, True)
     # make a linear dataset
     # X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
     # y = np.dot(X, np.array([1, 2])) + 3
     # dataset_ = Dataset(X=X, y=y)
+    data1.X = StandardScaler().fit_transform(data1.X)
+    train, test = train_test_split(data1, 0.3, 2)
+    model = RidgeRegression()
 
+    model.fit(train)
     # fit the model
-    model = RidgeRegression(True)
-    model.fit(data1, True)
-
 
     # get coefs
     print(f"Parameters: {model.history}")
