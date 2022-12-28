@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from typing import Tuple, Sequence
+from prettytable import PrettyTable
 
 
 class Dataset:
@@ -31,15 +32,33 @@ class Dataset:
         self.Label = label
 
     def __str__(self):
+        """
+        Método para dar print do dataset
+        """
+
+        # 1º método -> sem packages
+        # if not (self.Features is None):
+        #     r = f'X:{str(self.Features)[:]}\n--\n'
+        # else:
+        #     r = 'X:\n--\n'
+        # for elem in self.X:
+        #     r += str(elem)[:].replace(' ', '\t') + '\n'
+        # if not (self.Y is None):
+        #     r += f'\nY: {self.Label}\n--\n' + str(self.Y).replace(' ', '\t') + '\n'
+        # return r
+
+        # 2º método -> com packages
+        table = PrettyTable()
         if not (self.Features is None):
-            r = f'X:{str(self.Features)[:]}\n--\n'
-        else:
-            r = 'X:\n--\n'
+            table.field_names = self.Features
         for elem in self.X:
-            r += str(elem)[:].replace(' ', '\t') + '\n'
-        if not (self.Y is None):
-            r += f'\nY: {self.Label}\n--\n' + str(self.Y).replace(' ', '\t') + '\n'
-        return r
+            table.add_row(elem)
+        if not (self.Y is None) and (self.Label != None):
+            table.add_column(self.Label, self.Y)
+        if not (self.Y is None) and (self.Label is None):
+            table.add_column('y', self.Y)
+
+        return str(table)
 
     def shape(self):
         '''
@@ -162,8 +181,6 @@ class Dataset:
         return Dataset(self.X, self.Y, self.Features, self.Label)
 
     @classmethod
-
-
     # Cria um dataset random -> professor, usado para testes
 
     def from_random(cls,
@@ -205,5 +222,6 @@ if __name__ == '__main__':
     features = ['A', 'B', 'C']
     label = 'y'
     dataset = Dataset(X=x, y=None, features=features, label=None)
+    dataset= temp
     # print(dataset.get_var())
-    print(temp.fill_Na(0))
+    print(dataset)
