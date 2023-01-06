@@ -53,7 +53,7 @@ class Dataset:
             table.field_names = self.Features
         for elem in self.X:
             table.add_row(elem)
-        if not (self.Y is None) and (self.Label != None):
+        if not (self.Y is None) and not (self.Label is None):
             table.add_column(self.Label, self.Y)
         if not (self.Y is None) and (self.Label is None):
             table.add_column('y', self.Y)
@@ -144,6 +144,7 @@ class Dataset:
                 for elem in dt[0:, -1:]:
                     self.Y.append(float(elem))
                 self.X = dt[0:, :-1]
+
         else:
             dfn = df.dropna()
             dt = dfn.to_numpy()
@@ -152,7 +153,7 @@ class Dataset:
 
         return Dataset(self.X, self.Y, self.Features, self.Label)
 
-    def fill_Na(self, n_or_m):
+    def fill_Na(self, n_or_m= 0):
 
         """
         Substitui os valores ausentes pelo valor de escolha do usuário.
@@ -161,7 +162,7 @@ class Dataset:
 
         df = pd.DataFrame(self.X, columns=self.Features)
         if not (self.Y is None):
-            df.insert(loc=len(df), column=self.Label, value=self.Y)
+            df.insert(loc=len(df), column=self.Label, value = self.Y)
 
             fill_df = df.fillna(n_or_m)
             dt = fill_df.to_numpy()
@@ -221,7 +222,9 @@ if __name__ == '__main__':
     y = np.array([1, 2, 5])
     features = ['A', 'B', 'C']
     label = 'y'
-    dataset = Dataset(X=x, y=None, features=features, label=None)
-    dataset= temp
-    # print(dataset.get_var())
+    dataset = Dataset(X=x, y=y, features=features, label=None)
+    dataset.fill_Na(0)
     print(dataset)
+    # dataset= temp
+    # print(dataset.get_var())
+
